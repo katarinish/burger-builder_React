@@ -18,7 +18,10 @@ const buildControls = (props) => {
                 <BuildControl
                     key={control.label}
                     label={control.label}
-                    type={control.type} />
+                    addIngredient={() => props.handleAddIngredient(control.type)}
+                    removeIngredient={() => props.handleRemoveIngredient(control.type)}
+                    isDisabled={props.disabledIngrInfo[control.type]}
+                    />
             ))}
         </div>
     );
