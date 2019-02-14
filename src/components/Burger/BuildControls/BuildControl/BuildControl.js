@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './BuildControl.css';
 
@@ -15,6 +16,13 @@ const buildControl = (props) => {
                 onClick={props.addIngredient} >More</button>
         </div>
     );
+}
+
+buildControl.propTypes = {
+    label: PropTypes.string.isRequired,
+    removeIngredient: PropTypes.func.isRequired,
+    addIngredient: PropTypes.func.isRequired,
+    isDisabled: PropTypes.bool,
 }
 
 export default buildControl;

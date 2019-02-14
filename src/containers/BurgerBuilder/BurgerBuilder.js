@@ -20,6 +20,7 @@ export default class BurgerBuilder extends Component {
             meat: 0
         },
         totalPrice: 4,
+        purchasable: false,
     };
 
     _updateTotalPrice = (ingredient, type, count = 1) => {
@@ -39,6 +40,18 @@ export default class BurgerBuilder extends Component {
 
         return ingredients;
     }
+
+    _updatePurchasableState = (ingredients) => {
+        let totalAmount = 0;
+
+        for (let ing in ingredients) {
+            totalAmount += ingredients[ing];
+        }
+
+        this.setState({
+            purchasable: totalAmount > 0
+        })
+    }
     
 
     addIngredientHandler = (ingType) => {
@@ -53,6 +66,8 @@ export default class BurgerBuilder extends Component {
             ingredients: updatedIngredients,
             totalPrice: newPrice
         });
+
+        this._updatePurchasableState(updatedIngredients);
     }
 
     removeIngredientHandler = (ingType) => {
@@ -71,6 +86,8 @@ export default class BurgerBuilder extends Component {
             ingredients: updatedIngredients,
             totalPrice: newPrice
         });
+
+        this._updatePurchasableState(updatedIngredients);
     }
     
 
@@ -83,7 +100,9 @@ export default class BurgerBuilder extends Component {
                 <BuildControls 
                     handleAddIngredient={this.addIngredientHandler}
                     handleRemoveIngredient={this.removeIngredientHandler}
-                    disabledIngrInfo={disabledIngrInfo} />
+                    disabledIngrInfo={disabledIngrInfo} 
+                    totalPrice={this.state.totalPrice}
+                    isPurchasable={this.state.purchasable}/>
             </Aux>
         )
     }
