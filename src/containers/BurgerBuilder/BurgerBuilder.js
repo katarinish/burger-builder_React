@@ -98,13 +98,21 @@ export default class BurgerBuilder extends Component {
             purchasing: true,
         });
     }
+
+    rejectOrderHandler = () => {
+        this.setState({
+            purchasing: false,
+        });
+    }
     
     render() {
         const disabledIngrInfo = this._getDisabledInfo();
 
         return (
             <Aux>
-                <Modal isShown={this.state.purchasing}>
+                <Modal 
+                    isShown={this.state.purchasing}
+                    handleRejectOrder={this.rejectOrderHandler} >
                     <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
