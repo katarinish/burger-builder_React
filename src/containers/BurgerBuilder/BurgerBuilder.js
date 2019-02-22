@@ -104,6 +104,13 @@ export default class BurgerBuilder extends Component {
             purchasing: false,
         });
     }
+
+    purchaseOrderHandler = () => {
+        this.setState({
+            purchasing: false,
+        });
+    }
+    
     
     render() {
         const disabledIngrInfo = this._getDisabledInfo();
@@ -113,7 +120,11 @@ export default class BurgerBuilder extends Component {
                 <Modal 
                     isShown={this.state.purchasing}
                     handleRejectOrder={this.rejectOrderHandler} >
-                    <OrderSummary ingredients={this.state.ingredients} />
+                    <OrderSummary
+                        ingredients={this.state.ingredients} 
+                        handleRejectOrder={this.rejectOrderHandler}
+                        handlePurchaseOrder={this.purchaseOrderHandler}
+                        price={this.state.totalPrice}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
