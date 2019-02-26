@@ -10,7 +10,7 @@ const Modal = (props) => {
         <Aux>
             <Backdrop 
                 isShown={props.isShown}
-                rejectOrder={props.handleRejectOrder} />
+                click={props.handleRejectOrder} />
             <div className={`${styles.Modal}
                 ${!props.isShown ? styles.hidden : ''}`}>
                 {props.children}
