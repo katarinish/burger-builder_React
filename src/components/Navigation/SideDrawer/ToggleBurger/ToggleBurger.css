@@ -1,0 +1,38 @@
+.ToggleBurger {
+    height: 100%;
+    width: 100px;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.ToggleBurger span {
+    width: 65%;
+    height: 15%;
+    background-color: #fff;
+    box-shadow: 2px 2px 2px #966909;
+}
+
+.ToggleBurger:hover {
+    background-color: #8F5C2C;
+}
+
+.ToggleBurger:hover span {
+    box-shadow: 2px 2px 2px #4084C8;
+}
+
+@media (max-width: 499px) {
+    .ToggleBurger {
+        max-width: 80px;
+    }
+
+    .ToggleBurger span {
+        height: 10%;
+    }
+}

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 
-import Toolbar from '../Navigation/Toolbar/Toolbar';
-import Aux from '../../hoc/Aux';
-import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import Aux from '../Aux/Aux';
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
 import styles from './Layout.css';
 
 export default class Layout extends Component {
-    state ={
-        isSideDrawerOpen: true,
+    state = {
+        isSideDrawerOpen: false,
     }
 
     closeSideDrawerHandler = () => {
@@ -16,17 +16,26 @@ export default class Layout extends Component {
             isSideDrawerOpen: false,
         });
     }
-    
+
+    toggleBurgerHandler = () => {
+        this.setState((state, props) => { 
+            return { 
+                isSideDrawerOpen: !state.isSideDrawerOpen
+            };
+        });
+    }
     
     openSideDrawerHandler = () => {
-    
+        this.setState({
+            isSideDrawerOpen: true,
+        });
     }
     
 
     render() {
         return (
             <Aux>
-                <Toolbar />
+                <Toolbar handleToggleBurger={this.toggleBurgerHandler}/>
                 <SideDrawer 
                     isOpen={this.state.isSideDrawerOpen}
                     handleCloseSideDrawer={this.closeSideDrawerHandler}/>
