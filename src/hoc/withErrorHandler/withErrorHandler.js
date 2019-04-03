@@ -10,8 +10,8 @@ const withErrorHandler = (WrappedComponent, axios) => {
             isModalOpen: false,
         }
 
-        componentDidMount = () => {
-            axios.interceptors.response.use(
+        componentWillMount = () => {
+            this.reqInterceptor = axios.interceptors.response.use(
                 (response) => {
                     this.setState({
                         isModalOpen: false,
@@ -29,14 +29,20 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 }
             );
 
-            axios.interceptors.request.use(request => {
+            this.respInterceptor = axios.interceptors.request.use(request => {
                 this.setState({
                     error: null,
-                    isModalOpen: true,
+                    isModalOpen: false,
                 });
                 return request;
             });
         }
+
+        componentWillUnmount = () => {
+            axios.interceptors.request.eject(this.reqInterceptor);
+            axios.interceptors.response.eject(this.respInterceptor);
+        }
+        
 
         confirmErrorHandler = () => {
             this.setState({

@@ -8,10 +8,9 @@ const navigationItems = (props) => {
     return (
         <ul className={styles.NavigationItems}>
             <NavigationItem 
-                link='/'
-                isActive >Burger Builder</NavigationItem>
+                link='/' >Burger Builder</NavigationItem>
             <NavigationItem 
-                link='/'>Checkout</NavigationItem>
+                link='/checkout'>Checkout</NavigationItem>
         </ul>
     )
 }
