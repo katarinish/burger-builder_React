@@ -27,6 +27,7 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount = () => {
+        console.log(this.props);
         axios.get('/ingredients.json')
             .then(response => {
                 this.setState({
@@ -111,45 +112,48 @@ class BurgerBuilder extends Component {
         });
     }
 
-    rejectOrderHandler = () => {
+    rejectOrderHandler = () => {        
         this.setState({
             purchasing: false,
         });
     }
 
     purchaseOrderHandler = () => {
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Kate Kovylina',
-                address: {
-                    street: 'Test street',
-                    zipCode: 123321,
-                    country: 'Russia',
-                }
-            },
-            deliveryMethod: 'fastest',
-        }
+        this.props.history.push('/checkout');
 
-        this.setState({
-            isLoading: true,
-        })
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Kate Kovylina',
+        //         address: {
+        //             street: 'Test street',
+        //             zipCode: 123321,
+        //             country: 'Russia',
+        //         }
+        //     },
+        //     deliveryMethod: 'fastest',
+        // }
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({
-                    isLoading: false,
-                    purchasing: false
-                });
-            })
-            .catch(error => {
-                console.log('Error sending order request --->', error);
-                this.setState({
-                    isLoading: false,
-                    purchasing: false
-                });
-            });
+        // this.setState({
+        //     isLoading: true,
+        // })
+
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         this.setState({
+        //             isLoading: false,
+        //             purchasing: false
+        //         });
+
+        //     })
+        //     .catch(error => {
+        //         console.log('Error sending order request --->', error);
+        //         this.setState({
+        //             isLoading: false,
+        //             purchasing: false
+        //         });
+        //     });
     }
     
     

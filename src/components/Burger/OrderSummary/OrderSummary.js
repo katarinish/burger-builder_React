@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from 'react-router-dom';
 
 import Button from '../../UI/Button/Button';
 import Aux from '../../../hoc/Aux/Aux';
@@ -38,4 +39,4 @@ class OrderSummary extends Component {
     }
 }
 
-export default OrderSummary;
+export default withRouter(OrderSummary);
