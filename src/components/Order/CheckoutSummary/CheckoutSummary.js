@@ -17,10 +17,10 @@ const checkoutSummary = (props) => {
 
             <Button 
                 type='Danger'
-                click={props.handleCancelButton} >Cancel</Button>
+                click={props.handleCancelButton} >CANCEL</Button>
             <Button 
                 type='Success'
-                click={props.handleSuccessButton}>Continue</Button>
+                click={props.handleSuccessButton}>CONTINUE</Button>
         </div>
     );
 }

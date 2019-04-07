@@ -35,6 +35,8 @@ class BurgerBuilder extends Component {
                         ...response.data
                     }
                 });
+                
+                this._updatePurchasableState(response.data);
             });
     }
     

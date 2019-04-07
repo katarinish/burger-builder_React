@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 import BuildControl from './BuildControl/BuildControl';
 
 import styles from './BuildControls.css';
