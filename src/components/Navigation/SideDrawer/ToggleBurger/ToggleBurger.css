@@ -27,6 +27,12 @@
     box-shadow: 2px 2px 2px #4084C8;
 }
 
+@media (min-width: 499px) {
+    .ToggleBurger {
+        display: none;
+    }
+}
+
 @media (max-width: 499px) {
     .ToggleBurger {
         max-width: 80px;

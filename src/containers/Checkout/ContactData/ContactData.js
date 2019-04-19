@@ -4,17 +4,58 @@ import { withRouter } from 'react-router-dom';
 import axios from '../../../axios-orders';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 
 import styles from './ContactData.css';
 
 class ContactData extends Component {
     state = {
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            building: '',
-            postalCode: '',
+        orderForm: {
+            name: {
+                config: {
+                    type: 'text',
+                    placeholder: 'Your Name',
+                },
+                value: '',
+            },
+            email: {
+                config: {
+                    type: 'text',
+                    placeholder: 'Your Email',
+                },
+                value: '',
+            },
+            street: {
+                config: {
+                    type: 'text',
+                    placeholder: 'Street',
+                },
+                value: '',
+            },
+            building: {
+                config: {
+                    type: 'text',
+                    placeholder: 'Building',
+                },
+                value: '',
+            },
+            postalCode: {
+                config: {
+                    type: 'text',
+                    placeholder: 'Postal Code',
+                },
+                value: '',
+            },
+            deliveryMethod: {
+                type: 'select',
+                config: {
+                    options: [
+                        {value: 'fastest', valueToDisplay: 'Fastest'},
+                        {value: 'cheapest', valueToDisplay: 'Cheapest'}
+                    ]
+                },
+                value: '',
+            }
         },
         isLoading: false,
     }
@@ -59,26 +100,30 @@ class ContactData extends Component {
     
 
     render() {
-        let form = (
-            <form className={styles.DataForm}>
-                <input type='text' name='name' placeholder='Your Name'/>
-                <input type='text' name='email' placeholder='Your Email'/>
-                <input type='text' name='street' placeholder='Your Street'/>
-                <input type='text' name='building' placeholder='Your Building'/>
-                <input type='text' name='postal' placeholder='Your Postal Code'/>
-                <Button
-                    click={this.submitOrderHandler}
-                    type='Success'>ORDER</Button>
-            </form>
-        );
+        let formElements = [];
+        for (let key in this.state.orderForm) {
+            let elemConfig = this.state.orderForm[key];
+            let element = (
+                <Input 
+                    key={`${key}${elemConfig.value}`}
+                    type={elemConfig.type}
+                    config={elemConfig.config}
+                    value={elemConfig.value} />
+            );
+
+            formElements.push(element);
+        }
+
         if(this.state.isLoading) {
-            form = <Spinner />
+            formElements = <Spinner />
         }
 
         return (
             <div className={styles.ContactData}>
                 <h3>Fill in your contact data!</h3>
-                {form}
+                <form className={styles.DataForm}>
+                    {formElements}
+                </form>
             </div>
         );
     }

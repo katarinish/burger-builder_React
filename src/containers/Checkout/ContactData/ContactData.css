@@ -7,11 +7,6 @@
     padding: 10px;
 }
 
-.DataForm input {
-    margin: 0 auto; 
-    display: block;
-}
-
 @media (min-width: 600px) {
     .ContactData {
         max-width: 500px;

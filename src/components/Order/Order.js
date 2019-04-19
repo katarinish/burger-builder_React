@@ -20,6 +20,7 @@ const order = (props) => {
 
     return (
         <div className={styles.Order}>
+            <h4>Ingredients: </h4>
             <ul>
                 {ingredients}
             </ul>
