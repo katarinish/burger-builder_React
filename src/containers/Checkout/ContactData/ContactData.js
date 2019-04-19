@@ -97,32 +97,47 @@ class ContactData extends Component {
                 });
             });
     }
-    
 
+    onInputChangeHandler = (elType, event) => {
+        console.log(event.target.value);
+
+        let modifiedForm = JSON.parse(JSON.stringify(this.state.orderForm));
+        modifiedForm[elType].value = event.target.value;
+
+        this.setState({
+            orderForm: modifiedForm
+        });
+    }
+    
     render() {
         let formElements = [];
         for (let key in this.state.orderForm) {
             let elemConfig = this.state.orderForm[key];
             let element = (
                 <Input 
-                    key={`${key}${elemConfig.value}`}
+                    key={key}
                     type={elemConfig.type}
                     config={elemConfig.config}
-                    value={elemConfig.value} />
+                    value={elemConfig.value} 
+                    onChange={(event) => this.onInputChangeHandler(key, event)}/>
             );
 
             formElements.push(element);
         }
 
-        if(this.state.isLoading) {
+        if (this.state.isLoading) {
             formElements = <Spinner />
         }
 
         return (
             <div className={styles.ContactData}>
                 <h3>Fill in your contact data!</h3>
-                <form className={styles.DataForm}>
+                <form 
+                    className={styles.DataForm}
+                    onSubmit={this.submitOrderHandler}
+                    >
                     {formElements}
+                    <Button type='Success'>ORDER</Button>
                 </form>
             </div>
         );

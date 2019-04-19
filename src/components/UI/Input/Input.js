@@ -11,13 +11,31 @@ const input = (props) => {
             input = <textarea 
                 className={styles.InputElement} 
                 {...props.config} 
-                value={props.value} />;
+                value={props.value} 
+                onChange={props.onChange} />;
+            break;
+        case('select'):
+            input = (
+                <select
+                    className={styles.InputElement} 
+                    value={props.value} 
+                    onChange={props.onChange} >
+                    {props.config.options.map(el => (
+                        <option 
+                            value={el.value}
+                            key={el.value} >
+                            {el.valueToDisplay}
+                        </option>
+                    ))}
+                </select>
+            );
             break;
         default:
             input = <input 
                 className={styles.InputElement} 
                 {...props.config} 
-                value={props.value} />;
+                value={props.value} 
+                onChange={props.onChange} />;
     }
 
     return (
@@ -33,5 +51,6 @@ input.propTypes = {
     type: PropTypes.string,
     config: PropTypes.object,
     value: PropTypes.string,
+    onChange: PropTypes.func,
 }
 export default input;
