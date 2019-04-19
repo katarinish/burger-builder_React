@@ -17,6 +17,11 @@ class ContactData extends Component {
                     placeholder: 'Your Name',
                 },
                 value: '',
+                validation: {
+                    isRequired: true,
+                },
+                isValid: false,
+                isTouched: false,
             },
             email: {
                 config: {
@@ -24,6 +29,11 @@ class ContactData extends Component {
                     placeholder: 'Your Email',
                 },
                 value: '',
+                validation: {
+                    isRequired: true,
+                },
+                isValid: false,
+                isTouched: false,
             },
             street: {
                 config: {
@@ -31,6 +41,11 @@ class ContactData extends Component {
                     placeholder: 'Street',
                 },
                 value: '',
+                validation: {
+                    isRequired: true,
+                },
+                isValid: false,
+                isTouched: false,
             },
             building: {
                 config: {
@@ -38,6 +53,11 @@ class ContactData extends Component {
                     placeholder: 'Building',
                 },
                 value: '',
+                validation: {
+                    isRequired: true,
+                },
+                isValid: false,
+                isTouched: false,
             },
             postalCode: {
                 config: {
@@ -45,6 +65,12 @@ class ContactData extends Component {
                     placeholder: 'Postal Code',
                 },
                 value: '',
+                validation: {
+                    isRequired: true,
+                    isNumber: true,
+                },
+                isValid: false,
+                isTouched: false,
             },
             deliveryMethod: {
                 type: 'select',
@@ -54,33 +80,52 @@ class ContactData extends Component {
                         {value: 'cheapest', valueToDisplay: 'Cheapest'}
                     ]
                 },
-                value: '',
+                validation: {
+                    isRequired: true,
+                },
+                value: 'fastest',
+                isValid: false,
+                isTouched: false,
             }
         },
         isLoading: false,
     }
 
+    isValid = (value, rules) => {
+        let isValidValue = true;
+
+        if (rules.isRequired) {
+            isValidValue = value.trim() !== '' && isValidValue;
+        }
+
+        if (rules.isNumber) {
+            isValidValue = isValidValue && (parseInt(value, 10).toString() === value)
+        }
+
+        return isValidValue;
+    }
+    
+
     submitOrderHandler = (event) => {
         event.preventDefault();
-        console.log(this.props);
 
-        this.setState({
-            isLoading: true,
-        });
+        let userData = {};
+        const orderForm = this.state.orderForm;
+        for (let inputType in orderForm) {
+            userData[inputType] = orderForm[inputType].value;
+
+            if (!orderForm[inputType].isValid) return;
+        }
 
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-            customer: {
-                name: 'Kate Kovylina',
-                address: {
-                    street: 'Test street',
-                    zipCode: 123321,
-                    country: 'Russia',
-                }
-            },
-            deliveryMethod: 'fastest',
+            userData,
         }
+
+        this.setState({
+            isLoading: true,
+        });
 
         axios.post('/orders.json', order)
             .then(response => {
@@ -99,10 +144,11 @@ class ContactData extends Component {
     }
 
     onInputChangeHandler = (elType, event) => {
-        console.log(event.target.value);
-
         let modifiedForm = JSON.parse(JSON.stringify(this.state.orderForm));
-        modifiedForm[elType].value = event.target.value;
+        const elementConfig = modifiedForm[elType];
+        elementConfig.value = event.target.value;
+        elementConfig.isValid = this.isValid(event.target.value, elementConfig.validation);
+        elementConfig.isTouched = true;
 
         this.setState({
             orderForm: modifiedForm
@@ -119,6 +165,8 @@ class ContactData extends Component {
                     type={elemConfig.type}
                     config={elemConfig.config}
                     value={elemConfig.value} 
+                    isValid={elemConfig.isValid}
+                    isModified={elemConfig.isTouched}
                     onChange={(event) => this.onInputChangeHandler(key, event)}/>
             );
 
