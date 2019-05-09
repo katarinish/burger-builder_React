@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import axios from '../../axios-orders';
 
+import * as actionTypes from '../../store/constants';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'; 
@@ -27,7 +29,6 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount = () => {
-        console.log(this.props);
         axios.get('/ingredients.json')
             .then(response => {
                 this.setState({
@@ -40,7 +41,6 @@ class BurgerBuilder extends Component {
             });
     }
     
-
     _updateTotalPrice = (ingredient, type, count = 1) => {
         const oldPrice = this.state.totalPrice;
 
@@ -68,7 +68,7 @@ class BurgerBuilder extends Component {
 
         this.setState({
             purchasable: totalAmount > 0
-        })
+        });
     }
     
 
@@ -121,24 +121,12 @@ class BurgerBuilder extends Component {
     }
 
     purchaseOrderHandler = () => {
-        const queryParams = [];
-        const ingredients = this.state.ingredients;
-
-        
-        for (let ingr in ingredients) {
-            queryParams.push(`${encodeURIComponent(ingr)}=${encodeURIComponent(ingredients[ingr])}`);
-        }
-
-        queryParams.push(`totalPrice=${this.state.totalPrice}`);
-
-        const search = queryParams.join('&');
-
         this.props.history.push({
             pathname: '/checkout',
-            search
         });
+
+        this.props.purchaseOrderDispatch(this.state.ingredients, this.state.totalPrice);
     }
-    
     
     render() {
         const disabledIngrInfo = this._getDisabledInfo();
@@ -185,4 +173,27 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default withErrorHandler(BurgerBuilder, axios);
+const mapStateToProps = (state) => ({
+    ingredients: state.ingredients,
+    totalPrice: state.price,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    purchaseOrderDispatch: (ingredients, totalPrice) => {
+        dispatch({
+            type: actionTypes.SET_INGREDIENTS,
+            payload: {
+                ...ingredients
+            },           
+        });
+
+        dispatch({
+            type: actionTypes.SET_TOTAL_PRICE,
+            payload: totalPrice,
+        });
+    },
+
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
