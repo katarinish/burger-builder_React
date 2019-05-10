@@ -12,16 +12,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Modal from '../../components/UI/Modal/Modal';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-const INGREDIENT_PRICES = {
-    salad: 0.5,
-    bacon: 0.7,
-    cheese:  0.6,
-    meat:  1.3,
-};
-
 class BurgerBuilder extends Component {
     state = {
-        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
@@ -37,21 +29,12 @@ class BurgerBuilder extends Component {
                     }
                 });
                 
-                this._updatePurchasableState(response.data);
+                this.isPurchasable(response.data);
             });
-    }
-    
-    _updateTotalPrice = (ingredient, type, count = 1) => {
-        const oldPrice = this.state.totalPrice;
-
-        if (type === 'inc')
-            return oldPrice + (INGREDIENT_PRICES[ingredient] * count);
-        if (type === 'dec')
-            return oldPrice - (INGREDIENT_PRICES[ingredient] * count);
     }
 
     _getDisabledInfo = () => {
-        const ingredients = { ...this.state.ingredients };
+        const ingredients = { ...this.props.ingredients };
         for (let key in ingredients) {
             ingredients[key] = ingredients[key] <= 0;
         }
@@ -59,53 +42,14 @@ class BurgerBuilder extends Component {
         return ingredients;
     }
 
-    _updatePurchasableState = (ingredients) => {
+    isPurchasable = () => {
         let totalAmount = 0;
-
+        const ingredients = this.props.ingredients;
         for (let ing in ingredients) {
             totalAmount += ingredients[ing];
         }
 
-        this.setState({
-            purchasable: totalAmount > 0
-        });
-    }
-    
-
-    addIngredientHandler = (ingType) => {
-        const updatedCount = this.state.ingredients[ingType] + 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        };
-        updatedIngredients[ingType] = updatedCount;
-        const newPrice = this._updateTotalPrice(ingType, 'inc');
-        
-        this.setState({
-            ingredients: updatedIngredients,
-            totalPrice: newPrice
-        });
-
-        this._updatePurchasableState(updatedIngredients);
-    }
-
-    removeIngredientHandler = (ingType) => {
-        const oldCount = this.state.ingredients[ingType];
-        if (oldCount <= 0) return;
-        
-        const updatedCount = oldCount - 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        };
-        updatedIngredients[ingType] = updatedCount;
-
-        const newPrice = this._updateTotalPrice(ingType, 'dec');
-
-        this.setState({
-            ingredients: updatedIngredients,
-            totalPrice: newPrice
-        });
-
-        this._updatePurchasableState(updatedIngredients);
+        return totalAmount > 0;
     }
 
     orderBurgerHandler = () => {
@@ -121,11 +65,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseOrderHandler = () => {
-        this.props.history.push({
-            pathname: '/checkout',
-        });
-
-        this.props.purchaseOrderDispatch(this.state.ingredients, this.state.totalPrice);
+        this.props.history.push('/checkout');
     }
     
     render() {
@@ -133,10 +73,10 @@ class BurgerBuilder extends Component {
 
         let orderSummary = (
             <OrderSummary
-                ingredients={this.state.ingredients} 
+                ingredients={this.props.ingredients} 
                 handleRejectOrder={this.rejectOrderHandler}
                 handlePurchaseOrder={this.purchaseOrderHandler}
-                price={this.state.totalPrice}/>
+                price={this.props.totalPrice}/>
         );
 
         if (this.state.isLoading) {
@@ -145,16 +85,16 @@ class BurgerBuilder extends Component {
 
         let burger = <Spinner />;
 
-        if (this.state.ingredients) {
+        if (this.props.ingredients) {
             burger = (
                 <Aux>
-                    <Burger ingredients={this.state.ingredients}/>
+                    <Burger ingredients={this.props.ingredients}/>
                     <BuildControls 
-                        handleAddIngredient={this.addIngredientHandler}
-                        handleRemoveIngredient={this.removeIngredientHandler}
+                        handleAddIngredient={this.props.onAddIngredient}
+                        handleRemoveIngredient={this.props.onRemoveIngredient}
                         disabledIngrInfo={disabledIngrInfo} 
-                        totalPrice={this.state.totalPrice}
-                        isPurchasable={this.state.purchasable}
+                        totalPrice={this.props.totalPrice}
+                        isPurchasable={this.isPurchasable()}
                         orderBurger={this.orderBurgerHandler} />
                 </Aux>
             );
@@ -192,6 +132,14 @@ const mapDispatchToProps = (dispatch) => ({
             payload: totalPrice,
         });
     },
+    onAddIngredient: (ingType) => dispatch({
+            type: actionTypes.ADD_INGREDIENT,
+            payload: ingType,
+        }),
+    onRemoveIngredient: (ingType) => dispatch({
+        type: actionTypes.REMOVE_INGREDIENT,
+        payload: ingType,
+    }),
 
 });
 
