@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import axios from '../../axios-orders';
 
-import * as actionTypes from '../../store/constants';
+import * as actionCreators from '../../store/actions';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'; 
@@ -119,27 +119,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    purchaseOrderDispatch: (ingredients, totalPrice) => {
-        dispatch({
-            type: actionTypes.SET_INGREDIENTS,
-            payload: {
-                ...ingredients
-            },           
-        });
-
-        dispatch({
-            type: actionTypes.SET_TOTAL_PRICE,
-            payload: totalPrice,
-        });
-    },
-    onAddIngredient: (ingType) => dispatch({
-            type: actionTypes.ADD_INGREDIENT,
-            payload: ingType,
-        }),
-    onRemoveIngredient: (ingType) => dispatch({
-        type: actionTypes.REMOVE_INGREDIENT,
-        payload: ingType,
-    }),
+    onAddIngredient: (ingType) => dispatch(actionCreators.addIngredient(ingType)),
+    onRemoveIngredient: (ingType) => dispatch(actionCreators.removeIngredient(ingType)),
 
 });
 

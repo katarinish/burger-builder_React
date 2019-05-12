@@ -105,7 +105,6 @@ class ContactData extends Component {
 
         return isValidValue;
     }
-    
 
     submitOrderHandler = (event) => {
         event.preventDefault();
@@ -199,10 +198,5 @@ const mapStateToProps = (state) => ({
     ingredients: state.ingredients,
     price: state.price,
 });
-
-const mapDispatchToProps = {
-  
-}
-
 
 export default connect(mapStateToProps)(withRouter(ContactData));
