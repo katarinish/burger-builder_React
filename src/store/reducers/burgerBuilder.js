@@ -1,13 +1,10 @@
 import * as types from '../actions/actionTypes';
+import { updateObject } from '../utils';
 
 const initialState = {
-    ingredients: {
-        salad: 0,
-        meat: 0,
-        cheese: 0,
-        bacon: 0,
-    },
+    ingredients: null,
     price: 4,
+    isError: false,
 }
 
 const INGREDIENT_PRICES = {
@@ -20,35 +17,37 @@ const INGREDIENT_PRICES = {
 const addIngredient = (state, action) => {
     const ingredient = action.ingredient;
 
-    return {
-        ...state,
+    return updateObject(state, {
         ingredients: {
             ...state.ingredients,
             [ingredient]: state.ingredients[ingredient] + 1,
         },
         price: state.price + INGREDIENT_PRICES[ingredient]
-    }
+    });
 }
 
 const removeIngredient = (state, action) => {
     const ingredient = action.ingredient;
 
-    return {
-        ...state,
+    return updateObject(state, {
         ingredients: {
             ...state.ingredients,
             [ingredient]: state.ingredients[ingredient] - 1,
         },
         price: state.price - INGREDIENT_PRICES[ingredient]
-    }
+    });
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
+    case (types.SET_ERROR): 
+        return updateObject(state, {isError: action.isError})
     case (types.ADD_INGREDIENT):
         return addIngredient(state, action);
     case (types.REMOVE_INGREDIENT):
         return removeIngredient(state, action);
+    case (types.SET_INGREDIENTS):
+        return updateObject(state, {ingredients: action.ingredients, isError: false });
     default:
         return state
     }

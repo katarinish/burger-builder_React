@@ -14,23 +14,13 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 class BurgerBuilder extends Component {
     state = {
-        totalPrice: 4,
         purchasable: false,
         purchasing: false,
         isLoading: false,
     };
 
     componentDidMount = () => {
-        axios.get('/ingredients.json')
-            .then(response => {
-                this.setState({
-                    ingredients: {
-                        ...response.data
-                    }
-                });
-                
-                this.isPurchasable(response.data);
-            });
+        this.props.initIngredientsHandler();
     }
 
     _getDisabledInfo = () => {
@@ -85,7 +75,9 @@ class BurgerBuilder extends Component {
 
         let burger = <Spinner />;
 
-        if (this.props.ingredients) {
+        if (this.props.isError) {
+            burger = <h2>Ingredients cant be loaded</h2>;
+        } else if (this.props.ingredients) {
             burger = (
                 <Aux>
                     <Burger ingredients={this.props.ingredients}/>
@@ -107,7 +99,7 @@ class BurgerBuilder extends Component {
                     handleRejectOrder={this.rejectOrderHandler} >
                     {orderSummary}
                 </Modal>
-                {burger}
+                {burger}:;
             </Aux>
         )
     }
@@ -116,12 +108,13 @@ class BurgerBuilder extends Component {
 const mapStateToProps = (state) => ({
     ingredients: state.ingredients,
     totalPrice: state.price,
+    isError: state.isError,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     onAddIngredient: (ingType) => dispatch(actionCreators.addIngredient(ingType)),
     onRemoveIngredient: (ingType) => dispatch(actionCreators.removeIngredient(ingType)),
-
+    initIngredientsHandler: () => dispatch(actionCreators.initIngredients()),
 });
 
 
