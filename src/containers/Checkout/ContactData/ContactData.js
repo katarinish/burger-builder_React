@@ -87,8 +87,8 @@ class ContactData extends Component {
                 validation: {
                     isRequired: true,
                 },
-                value: 'fastest',
-                isValid: false,
+                value: 'cheapest',
+                isValid: true,
                 isTouched: false,
             }
         },

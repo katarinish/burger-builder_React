@@ -48,6 +48,8 @@ export default (state = initialState, action) => {
         return removeIngredient(state, action);
     case (types.SET_INGREDIENTS):
         return updateObject(state, {ingredients: action.ingredients, isError: false });
+    case (types.SET_TOTAL_PRICE):
+        return updateObject(state, {price: action.price})
     default:
         return state
     }

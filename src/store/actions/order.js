@@ -33,3 +33,9 @@ export const submitOrderForm = (orderData) => {
             .catch(error => dispatch(purchaseBurgerFailure(error)));
     }
 }
+
+export const initPurchaseOrder = () => {
+    return {
+        type: actionTypes.INIT_PURCHASE_ORDER,
+    }
+}
