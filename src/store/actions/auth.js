@@ -7,9 +7,10 @@ const initAuthenticate = () => ({
     type: actionTypes.INIT_AUTHENTICATE,
 });
 
-const authenticateSuccess = (authData) => ({
+const authenticateSuccess = ({idToken, localId}) => ({
     type: actionTypes.AUTHENTICATE_SUCCESS,
-    authData,
+    idToken,
+    userId: localId,
 });
 
 export const authenticateFailure = (error) => ({
@@ -27,7 +28,7 @@ export const authenticate = ({email, password, isSignUpMode}) => {
         }
 
         let url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${API_KEY}`;
-        if (isSignUpMode) {
+        if (!isSignUpMode) {
             url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${API_KEY}`;
         }
 
