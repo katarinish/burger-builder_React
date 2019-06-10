@@ -32,6 +32,14 @@ const authenticateFailure = (state, action) => {
     });
 };
 
+const logOut = (state, action) => {
+    return updateObject(state, {
+        idToken: null,
+        userId: null,
+        error: null,
+        isLoading: false,
+    });
+};
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -43,6 +51,8 @@ export default (state = initialState, action) => {
 
         case (actionTypes.AUTHENTICATE_FAILURE):
             return authenticateFailure(state, action);
+        case (actionTypes.LOG_OUT):
+            return logOut(state, action);
 
         default:
             return state;

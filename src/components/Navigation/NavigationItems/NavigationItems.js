@@ -17,6 +17,6 @@ const navigationItems = (props) => {
                 link='/auth' >Authenticate</NavigationItem>
         </ul>
     )
-}
+};
 
 export default navigationItems;

@@ -113,7 +113,6 @@ class Auth extends Component {
             );
         }
 
-        // error.response.data.error.message
         let errorMessage = null;
         if (this.props.error) {
             errorMessage = (

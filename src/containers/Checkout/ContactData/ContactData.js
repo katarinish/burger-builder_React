@@ -92,7 +92,7 @@ class ContactData extends Component {
                 isTouched: false,
             }
         },
-    }
+    };
 
     isValid = (value, rules) => {
         let isValidValue = true;
@@ -106,7 +106,7 @@ class ContactData extends Component {
         }
 
         return isValidValue;
-    }
+    };
 
     submitOrderHandler = (event) => {
         event.preventDefault();
@@ -123,10 +123,10 @@ class ContactData extends Component {
             ingredients: this.props.ingredients,
             price: this.props.price,
             userData,
-        }
+        };
 
-        this.props.submitOrderHandler(order);
-    }
+        this.props.submitOrderHandler(order, this.props.authToken);
+    };
 
     onInputChangeHandler = (elType, event) => {
         let modifiedForm = JSON.parse(JSON.stringify(this.state.orderForm));
@@ -138,7 +138,7 @@ class ContactData extends Component {
         this.setState({
             orderForm: modifiedForm
         });
-    }
+    };
     
     render() {
         let formElements = [];
@@ -182,11 +182,12 @@ const mapStateToProps = (state) => {
         ingredients: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.price,
         isLoading: state.order.isLoading,
+        authToken: state.auth.idToken,
     }
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    submitOrderHandler: (data) => dispatch(actions.submitOrderForm(data)),
+    submitOrderHandler: (data, token) => dispatch(actions.submitOrderForm(data, token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withErrorHandler(ContactData, axios)));

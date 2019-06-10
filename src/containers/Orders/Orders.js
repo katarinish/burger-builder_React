@@ -11,9 +11,8 @@ import * as actions from '../../store/actions/index';
 
 class Orders extends Component {
     componentDidMount = () => {
-        this.props.initOrders();
-    }
-    
+        this.props.initOrders(this.props.authToken);
+    };
 
     render() {
         let orders = <Spinner />;
@@ -44,10 +43,11 @@ class Orders extends Component {
 const mapStateToProps = (state) => ({
     isFetching: state.order.isLoading,
     orders: state.order.orders,
+    authToken: state.auth.idToken,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    initOrders: () => dispatch(actions.initOrders()),
+    initOrders: (token) => dispatch(actions.initOrders(token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Orders, axios));
