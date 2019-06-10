@@ -25,7 +25,7 @@ export const authenticate = ({email, password, isSignUpMode}) => {
             email,
             password,
             returnSecureToken: true,
-        }
+        };
 
         let url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${API_KEY}`;
         if (!isSignUpMode) {
@@ -39,7 +39,7 @@ export const authenticate = ({email, password, isSignUpMode}) => {
         })
         .catch(error => {
             console.log('Error authentication', error);
-            dispatch(authenticateFailure(error));
+            dispatch(authenticateFailure(error.response.data.error));
         });
     }
 };

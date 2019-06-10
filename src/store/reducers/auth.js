@@ -7,7 +7,7 @@ const initialState = {
     userId: null,
     error: null,
     isLoading: false,
-}
+};
 
 const initAuthenticate = (state, action) => updateObject(state, {
     isLoading: true, 
@@ -21,7 +21,7 @@ const authenticateSuccess = (state, action) => {
         userId: action.userId,
         error: null,
     });
-}
+};
 
 const authenticateFailure = (state, action) => {
     return updateObject(state, {
