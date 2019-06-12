@@ -4,6 +4,15 @@ import axios from 'axios';
 const API_KEY = 'AIzaSyCYvJyFpjhGIAzVaqAv1EvW1MeR5Kqzl_s';
 
 const TO_SECONDS = 1000;
+const TO_MSECONDS = 1000;
+const TOKEN = 'token';
+const EXPIRATION_DATE = 'expirationDate';
+const LOCAL_ID = 'localId';
+
+const calculateExpirationDate = (expiresIn) => {
+    const totalSecs = new Date().getTime() + expiresIn * TO_SECONDS;
+    return new Date(totalSecs);
+};
 
 const initAuthenticate = () => ({
     type: actionTypes.INIT_AUTHENTICATE,
@@ -26,11 +35,18 @@ export const setAuthRedirectPath = (path) => ({
 });
 
 
-export const logout = () => ({
-   type: actionTypes.LOG_OUT,
-});
+export const logout = () => {
+    localStorage.removeItem(TOKEN);
+    localStorage.removeItem(EXPIRATION_DATE);
+    localStorage.removeItem(LOCAL_ID);
+
+    return {
+        type: actionTypes.LOG_OUT,
+    }
+};
 
 const checkAuthExpireTime = (expirationTime) => {
+    console.log(expirationTime);
     return dispatch => {
         setTimeout(() => dispatch(logout()), expirationTime * TO_SECONDS);
     }
@@ -52,7 +68,10 @@ export const authenticate = ({email, password, isSignUpMode}) => {
 
         axios.post(url, requestPayload)
         .then(response => {
-            console.log(response);
+            localStorage.setItem(TOKEN, response.data.idToken);
+            localStorage.setItem(EXPIRATION_DATE, calculateExpirationDate(response.data.expiresIn));
+            localStorage.setItem(LOCAL_ID, response.data.localId);
+
             dispatch(authenticateSuccess(response.data));
             dispatch(checkAuthExpireTime(response.data.expiresIn));
         })
@@ -60,5 +79,30 @@ export const authenticate = ({email, password, isSignUpMode}) => {
             console.log('Error authentication', error);
             dispatch(authenticateFailure(error.response.data.error));
         });
+    }
+};
+
+export const checkAuthentificationState = () => {
+    return dispatch => {
+        const token = localStorage.getItem(TOKEN);
+        if (!token) {
+            dispatch(logout());
+        } else {
+            const expirationDate = new Date(localStorage.getItem(EXPIRATION_DATE));
+
+            if (expirationDate > new Date()) {
+                const localId = localStorage.getItem(LOCAL_ID);
+
+                dispatch(authenticateSuccess({
+                    idToken: token,
+                    localId,
+                }));
+                console.log('expDate ->', expirationDate.getTime());
+                console.log('currDate ->', new Date().getTime());
+                dispatch(checkAuthExpireTime((expirationDate.getTime() - new Date().getTime()) / TO_MSECONDS));
+            } else {
+                dispatch(logout());
+            }
+        }
     }
 };
