@@ -8,6 +8,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import styles from './Auth.css';
 
 import * as actions from '../../store/actions/';
+import {Redirect} from 'react-router';
 
 class Auth extends Component {
     state = {
@@ -39,6 +40,12 @@ class Auth extends Component {
         },
         isSignUpMode: true,
     };
+
+    componentDidMount() {
+        if (!this.props.isBuildingBurger) {
+            this.props.setRedirectPath('/');
+        }
+    }
 
     isValid = (value, rules) => {
         let isValidValue = true;
@@ -124,6 +131,7 @@ class Auth extends Component {
 
         return (
             <div className={styles.Auth}>
+                {this.props.isAuthorized ? <Redirect to={`${this.props.redirectPath}`} /> : null}
                 <form
                     onSubmit={this.submitFormHandler} >
                     {formElements}
@@ -144,10 +152,14 @@ class Auth extends Component {
 const mapStateToProps = (state) => ({
     isLoading: state.auth.isLoading,
     error: state.auth.error,
+    isAuthorized: state.auth.idToken !== null,
+    redirectPath: state.auth.redirectPath,
+    isBuildingBurger: state.burgerBuilder.isBuilding,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     onSubmitFormHandler: (authData) => dispatch(actions.authenticate(authData)),
+    setRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path)),
 });
 
 

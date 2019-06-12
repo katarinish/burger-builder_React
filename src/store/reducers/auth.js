@@ -7,6 +7,7 @@ const initialState = {
     userId: null,
     error: null,
     isLoading: false,
+    redirectPath: '/',
 };
 
 const initAuthenticate = (state, action) => updateObject(state, {
@@ -41,6 +42,12 @@ const logOut = (state, action) => {
     });
 };
 
+const setAuthRedirectPath = (state, action) => {
+    return updateObject(state, {
+        redirectPath: action.path,
+    });
+};
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case (actionTypes.INIT_AUTHENTICATE):
@@ -51,8 +58,12 @@ export default (state = initialState, action) => {
 
         case (actionTypes.AUTHENTICATE_FAILURE):
             return authenticateFailure(state, action);
+
         case (actionTypes.LOG_OUT):
             return logOut(state, action);
+
+        case (actionTypes.SET_AUTH_REDIRECT_PATH):
+            return setAuthRedirectPath(state, action);
 
         default:
             return state;

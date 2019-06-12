@@ -28,14 +28,17 @@ const buildControls = (props) => {
             <button 
                 className={styles.OrderButton}
                 disabled={!props.isPurchasable}
-                onClick={props.orderBurger} >ORDER NOW</button>
+                onClick={props.orderBurger}>
+                {props.isAuthorized ? 'ORDER NOW' : 'SIGN UP TO ORDER'}
+            </button>
         </div>
     );
-}
+};
 
 buildControls.propTypes = {
     totalPrice: PropTypes.number,
     isPurchasable: PropTypes.bool.isRequired,
-}
+    isAuthorized: PropTypes.bool,
+};
 
 export default buildControls;

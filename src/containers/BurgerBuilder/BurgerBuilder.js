@@ -19,7 +19,7 @@ class BurgerBuilder extends Component {
         isLoading: false,
     };
 
-    componentDidMount = () => {
+    componentDidMount() {
         this.props.initIngredientsHandler();
     }
 
@@ -30,7 +30,7 @@ class BurgerBuilder extends Component {
         }
 
         return ingredients;
-    }
+    };
 
     isPurchasable = () => {
         let totalAmount = 0;
@@ -40,24 +40,30 @@ class BurgerBuilder extends Component {
         }
 
         return totalAmount > 0;
-    }
+    };
 
     orderBurgerHandler = () => {
-        this.setState({
-            purchasing: true,
-        });
-    }
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/auth');
+            this.props.setRedirectPath('/checkout');
+            this.props.initPurchaseOrderHandler();
+        } else {
+            this.setState({
+                purchasing: true,
+            });
+        }
+    };
 
     rejectOrderHandler = () => {        
         this.setState({
             purchasing: false,
         });
-    }
+    };
 
     purchaseOrderHandler = () => {
         this.props.initPurchaseOrderHandler();
         this.props.history.push('/checkout');
-    }
+    };
     
     render() {
         const disabledIngrInfo = this._getDisabledInfo();
@@ -88,7 +94,8 @@ class BurgerBuilder extends Component {
                         disabledIngrInfo={disabledIngrInfo} 
                         totalPrice={this.props.totalPrice}
                         isPurchasable={this.isPurchasable()}
-                        orderBurger={this.orderBurgerHandler} />
+                        orderBurger={this.orderBurgerHandler}
+                        isAuthorized={this.props.isAuthorized}/>
                 </Aux>
             );
         }
@@ -100,19 +107,18 @@ class BurgerBuilder extends Component {
                     handleRejectOrder={this.rejectOrderHandler} >
                     {orderSummary}
                 </Modal>
-                {burger}:;
+                {burger}
             </Aux>
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    state = state.burgerBuilder;
-
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.price,
-        isError: state.isError,
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.price,
+        isError: state.burgerBuilder.isError,
+        isAuthorized: state.auth.idToken !== null,
     }
 };
 
@@ -121,6 +127,7 @@ const mapDispatchToProps = (dispatch) => ({
     onRemoveIngredient: (ingType) => dispatch(actionCreators.removeIngredient(ingType)),
     initIngredientsHandler: () => dispatch(actionCreators.initIngredients()),
     initPurchaseOrderHandler: () => dispatch(actionCreators.initPurchaseOrder()),
+    setRedirectPath: (path) => dispatch(actionCreators.setAuthRedirectPath(path)),
 });
 
 

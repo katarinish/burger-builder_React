@@ -14,10 +14,10 @@ const toolbar = (props) => {
                 <Logo />
             </div>
             <nav className={styles.DesktopOnly}>
-                <NavigationItems />
+                <NavigationItems isAuthorized={props.authorized}/>
             </nav>
         </header>
     ) 
-}
+};
 
 export default toolbar;

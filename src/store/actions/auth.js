@@ -20,13 +20,19 @@ export const authenticateFailure = (error) => ({
     error
 });
 
-const logOut = () => ({
+export const setAuthRedirectPath = (path) => ({
+   type: actionTypes.SET_AUTH_REDIRECT_PATH,
+   path,
+});
+
+
+export const logout = () => ({
    type: actionTypes.LOG_OUT,
 });
 
 const checkAuthExpireTime = (expirationTime) => {
     return dispatch => {
-        setTimeout(() => dispatch(logOut()), expirationTime * TO_SECONDS);
+        setTimeout(() => dispatch(logout()), expirationTime * TO_SECONDS);
     }
 };
 

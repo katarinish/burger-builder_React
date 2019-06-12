@@ -10,7 +10,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 
 class Orders extends Component {
-    componentDidMount = () => {
+    componentDidMount() {
         this.props.initOrders(this.props.authToken);
     };
 
