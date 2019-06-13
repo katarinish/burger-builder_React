@@ -14,7 +14,6 @@ const navigationItems = (props) => {
     return (
         <ul className={styles.NavigationItems}>
             <NavigationItem link='/' >Burger Builder</NavigationItem>
-            <NavigationItem link='/checkout' >Checkout</NavigationItem>
             {props.isAuthorized ? <NavigationItem link='/orders' > My Orders</NavigationItem> : null}
             {auth}
         </ul>

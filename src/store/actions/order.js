@@ -60,11 +60,12 @@ const fetchOrders = () => {
     }
 };
 
-export const initOrders = (token) => {
+export const initOrders = (token, userId) => {
     return (dispatch) => {
         dispatch(fetchOrders());
-        
-        axios.get(`/orders.json?auth=${token}`)
+
+        const queries = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+        axios.get(`/orders.json${queries}`)
             .then(response => {
                 const orders = [ ...Object.values(response.data)];
                 dispatch(fetchOrdersSuccess(orders));
