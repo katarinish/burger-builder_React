@@ -13,9 +13,8 @@ const sideDrawer = (props) => {
             <Backdrop 
                 isShown={props.isOpen}
                 click={props.handleCloseSideDrawer}/>
-            <div className={
-                    `${styles.SideDrawer} 
-                    ${(props.isOpen) ? styles.isOpen : styles.Closed}`}>
+            <div className={`${styles.SideDrawer} ${(props.isOpen) ? styles.isOpen : styles.Closed}`}
+                onClick={props.handleCloseSideDrawer}>
                 <div className={styles.Logo}>
                     <Logo />
                 </div>
@@ -25,6 +24,6 @@ const sideDrawer = (props) => {
             </div>
         </Aux>
     )
-}
+};
 
 export default sideDrawer;
