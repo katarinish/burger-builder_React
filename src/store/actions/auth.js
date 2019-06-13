@@ -46,7 +46,6 @@ export const logout = () => {
 };
 
 const checkAuthExpireTime = (expirationTime) => {
-    console.log(expirationTime);
     return dispatch => {
         setTimeout(() => dispatch(logout()), expirationTime * TO_SECONDS);
     }
@@ -76,7 +75,6 @@ export const authenticate = ({email, password, isSignUpMode}) => {
             dispatch(checkAuthExpireTime(response.data.expiresIn));
         })
         .catch(error => {
-            console.log('Error authentication', error);
             dispatch(authenticateFailure(error.response.data.error));
         });
     }
@@ -97,8 +95,6 @@ export const checkAuthentificationState = () => {
                     idToken: token,
                     localId,
                 }));
-                console.log('expDate ->', expirationDate.getTime());
-                console.log('currDate ->', new Date().getTime());
                 dispatch(checkAuthExpireTime((expirationDate.getTime() - new Date().getTime()) / TO_MSECONDS));
             } else {
                 dispatch(logout());
